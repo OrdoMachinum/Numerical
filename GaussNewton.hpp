@@ -16,6 +16,7 @@ class GaussNewton1D {
         static double calcDeterminant(const matrix_t & matr) ;
 
         static matrix_t getSubMatrix (unsigned int i, unsigned int j, matrix_t const & m);
+        static matrix_t getTransponated (matrix_t const & m);
 
         void calcNextBeta();
 

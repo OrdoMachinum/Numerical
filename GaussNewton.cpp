@@ -79,7 +79,7 @@ double GaussNewton1D::calcDeterminant(const matrix_t & matr) {
 }
 
 matrix_t GaussNewton1D::getSubMatrix (unsigned int rowI, unsigned int columnJ, matrix_t const & m) {
-    std::vector<std::vector < double> > subMatrix;
+    matrix_t subMatrix;
     for(unsigned int i = 0; i < m.size(); ++i) {
         if(i==rowI){
             continue;
@@ -96,6 +96,16 @@ matrix_t GaussNewton1D::getSubMatrix (unsigned int rowI, unsigned int columnJ, m
     return subMatrix;
 }
 
+matrix_t GaussNewton1D::getTransponated(matrix_t const & m) {
+    matrix_t mTransponated;
+    std::vector<double> rowT;
+    for(unsigned int i = 0; i < m.size(); ++i) {
+        rowT.clear();
+        for (unsigned int j = 0; j < m[i].size(); ++j) {
+            rowT.push_back(m[i][j]);
+        }
+    }
+}
 
 
 
