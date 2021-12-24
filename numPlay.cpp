@@ -7,7 +7,7 @@
 int main () {
     
     
-    std::vector<std::vector < double> > my;
+    matrix_t my;
 
     csvtools::csvToVects("five.csv", ';',my);
 

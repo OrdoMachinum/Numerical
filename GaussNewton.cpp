@@ -45,7 +45,7 @@ void GaussNewton1D::calcNextBeta() {
     
 }
 
-double GaussNewton1D::calcDeterminant(const std::vector<std::vector<double> > & matr) {
+double GaussNewton1D::calcDeterminant(const matrix_t & matr) {
     const unsigned int sizeDet { matr.size() };
     if (sizeDet == 0) {
         std::cout << " empty matrix " <<std::endl;
@@ -70,7 +70,7 @@ double GaussNewton1D::calcDeterminant(const std::vector<std::vector<double> > & 
             short sign = -1;
             for (unsigned int j = 0; j < sizeDet; ++j) {
                 sign *= -1;
-                auto sm = getSubMatrix(0, j, matr);
+                auto sm = GaussNewton1D::getSubMatrix(0, j, matr);
                 d += sign * matr[0][j] * calcDeterminant(sm);
             }
     }
@@ -78,7 +78,7 @@ double GaussNewton1D::calcDeterminant(const std::vector<std::vector<double> > & 
     
 }
 
-std::vector<std::vector < double> > GaussNewton1D::getSubMatrix (unsigned int rowI, unsigned int columnJ, std::vector<std::vector<double> > const & m) {
+matrix_t GaussNewton1D::getSubMatrix (unsigned int rowI, unsigned int columnJ, matrix_t const & m) {
     std::vector<std::vector < double> > subMatrix;
     for(unsigned int i = 0; i < m.size(); ++i) {
         if(i==rowI){

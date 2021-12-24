@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+typedef std::vector<std::vector < double> > matrix_t;
+
 
 class GaussNewton1D {
     public:
@@ -11,9 +13,9 @@ class GaussNewton1D {
 
         double partDerivative(double xi, unsigned int paramIdx);
         void calcJacobianOfErrorFunction();
-        static double calcDeterminant(const std::vector<std::vector<double> > & matr) ;
+        static double calcDeterminant(const matrix_t & matr) ;
 
-        static std::vector<std::vector < double> > getSubMatrix (unsigned int i, unsigned int j, std::vector<std::vector<double> > const & m);
+        static matrix_t getSubMatrix (unsigned int i, unsigned int j, matrix_t const & m);
 
         void calcNextBeta();
 
@@ -41,7 +43,7 @@ class GaussNewton1D {
         std::vector <double> _r; // Error
         std::vector <double> _params; // vector of actual parameters
         std::vector <double> _paramsVolatile; // parameter vector for partial derivative calcuation
-        std::vector<std::vector<double> > _jacobian;
+        matrix_t _jacobian;
 
         double (*_targetFncPtr) (double xi, std::vector<double> params);
 
