@@ -13,10 +13,24 @@ class GaussNewton1D {
 
         double partDerivative(double xi, unsigned int paramIdx);
         void calcJacobianOfErrorFunction();
-        static double calcDeterminant(const matrix_t & matr) ;
 
+        static double calcDeterminant(const matrix_t & matr) ;
+        static std::vector<double> getColumnOfMatrix(unsigned int const j, matrix_t const & m);
+        
         static matrix_t getSubMatrix (unsigned int i, unsigned int j, matrix_t const & m);
         static matrix_t getTransponated (matrix_t const & m);
+        static matrix_t getAdjungated (matrix_t const & m) ;
+        static matrix_t productWithNumber(matrix_t const & m, double c);
+        static matrix_t product(matrix_t const & a, matrix_t const & b);
+        static matrix_t getInverse(matrix_t const & m);
+        static matrix_t truncate(matrix_t const & m, double absLowest);
+        static double scalarProduct (std::vector<double> const & a, std::vector<double> const & b);
+        static std::vector<double> productMatrVect(matrix_t const & leftM, std::vector<double> const & rightV);
+        static std::vector<double> sumVects (std::vector<double> const & a, std::vector<double> const & b);
+        static std::vector<double> scaleVects (std::vector<double> const & v, double c);
+        static matrix_t sumMatrcies (matrix_t const & A, matrix_t const & B);
+
+        static void printMatrixToStream(matrix_t const & m, std::ostream outStream);
 
         void calcNextBeta();
 

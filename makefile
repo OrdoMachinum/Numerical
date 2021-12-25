@@ -1,7 +1,7 @@
 ifdef OS
-	OUT = bin/numplay.exe
+	OUT = "bin/numplay.exe"
 else
-	OUT = bin/numplay
+	OUT = "bin/numplay"
 endif
 
 $(OUT) :

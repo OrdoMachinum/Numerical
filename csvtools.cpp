@@ -49,6 +49,7 @@ bool csvtools::vecToCsv(std::string outFnm, char delim, const std::vector<std::v
 bool csvtools::csvToVects(std::string inFnm, char delim, std::vector<std::vector<double> > & vecVecDouble){
     std::ifstream in (inFnm);
     if(!in) {
+        std::cout << "File reading error of " << inFnm << std::endl;
         return false;
     }
     std::string lineInput ="";
