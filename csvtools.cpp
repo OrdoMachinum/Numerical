@@ -1,7 +1,7 @@
 #include "csvtools.hpp"
 
 
-bool csvtools::vecToCsv(std::string outFnm, const std::vector<double>& vecOfDoub) {
+bool csvtools::vecToCsv(std::string outFnm, const std::vector<double> & vecOfDoub) {
     std::ofstream outf(outFnm);
     if (!outf) {
         return false;
@@ -14,7 +14,7 @@ bool csvtools::vecToCsv(std::string outFnm, const std::vector<double>& vecOfDoub
     return true;
 }
 
-bool csvtools::vecToCsv(std::string outFnm, char delim, const std::vector<std::vector<double> > & vecOfDoub) {
+bool csvtools::vecToCsv(std::string outFnm, const std::vector<std::vector<double> > & vecOfDoub, char delim) {
     std::ofstream outf(outFnm);
     if (!outf) {
         return false;
@@ -57,6 +57,9 @@ bool csvtools::csvToVects(std::string inFnm, char delim, std::vector<std::vector
     bool firstLine = true;
     while(!in.eof()) {
         std::getline(in,lineInput);
+        if (lineInput.size() == 0) {
+            continue;
+        }
         splitString(lineInput, delim, row);
         vecVecDouble.push_back(row);
     }
@@ -70,9 +73,10 @@ int csvtools::splitString(const std::string& inStr, char delim, std::vector<doub
      uint64_t startIndex = 0;
      uint64_t index = 0;
      while (index < inStr.size()) {
-        if ((inStr[index] == delim) || (inStr[index] == '\n')) {
-            
-            outDoubleVect.push_back(std::stod(word));
+        if ((inStr[index] == delim) || (index >= inStr.size() - 1 )) {
+            if(!word.empty()) {
+                outDoubleVect.push_back(std::stod(word));
+            }
             //std::cout << std::stod(word) <<std::endl;
             word.clear();
             ++index;

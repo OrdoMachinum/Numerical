@@ -16,6 +16,8 @@ class GaussNewton1D {
 
         static double calcDeterminant(const matrix_t & matr) ;
         static std::vector<double> getColumnOfMatrix(unsigned int const j, matrix_t const & m);
+
+        static double calcSqrSum(std::vector<double> const & v);
         
         static matrix_t getSubMatrix (unsigned int i, unsigned int j, matrix_t const & m);
         static matrix_t getTransponated (matrix_t const & m);
@@ -43,13 +45,15 @@ class GaussNewton1D {
         std::vector<double> getParams() const;
 
         void setX(std::vector <double> x);
-        double getX() const;
+        std::vector <double>  getX() const;
 
-        void setY(std::vector<double> params);
+        void setY(std::vector<double> raw);
         std::vector<double> getY() const;
 
         void calcErrorVector();
         std::vector<double> getErrors() const;
+
+        matrix_t getJacbian() const;
         
         
     private:
@@ -63,9 +67,6 @@ class GaussNewton1D {
         double (*_targetFncPtr) (double xi, std::vector<double> params);
 
         double _dinamicScale {0.05};
-
-        
-
 };
 
 

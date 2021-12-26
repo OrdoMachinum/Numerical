@@ -8,8 +8,8 @@
 
 namespace csvtools{
 
-    bool vecToCsv(std::string outFnm, const std::vector<double>& vecOfDoub);
-    bool vecToCsv(std::string outFnm, char delim, const std::vector<std::vector<double> >& vecVecDouble);
+    bool vecToCsv(std::string outFnm, const std::vector<double> & vecOfDoub);
+    bool vecToCsv(std::string outFnm, const std::vector<std::vector<double> >& vecVecDouble, char delim);
 
     bool csvToVects(std::string inFnm, char delim, std::vector<std::vector<double> > & vecVecDouble);
 

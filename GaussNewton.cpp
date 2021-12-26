@@ -37,13 +37,29 @@ void GaussNewton1D::calcJacobianOfErrorFunction() {
     }
 }
 
+double GaussNewton1D::calcSqrSum(std::vector<double> const & v) {
+    double ss {0};
+    for(auto num : v) {
+        ss += num*num;
+    }
+    return ss;
+}
+
 void GaussNewton1D::calcNextBeta() {
+    calcJacobianOfErrorFunction();
+    calcErrorVector();
+
     if ( (_jacobian.size() == 0) || (_r.size() == 0) || (_params.size() == 0) ) {
         std::cout << "Not initalized members" << std::endl;
         return;
     }
+    const auto prevParams = _params;
+    const auto transJac = getTransponated(_jacobian);
+    const auto inverted = getInverse(product(transJac, _jacobian));
 
-    
+    const auto jacProdPred = product(inverted , transJac);
+
+    _params = sumVects(prevParams, scaleVects( productMatrVect(jacProdPred, _r) , -1.0) );
 }
 
 double GaussNewton1D::calcDeterminant(const matrix_t & matr) {
@@ -160,13 +176,13 @@ matrix_t GaussNewton1D::productWithNumber(matrix_t const & m, double const c) {
 }
 
 matrix_t GaussNewton1D::product(matrix_t const & leftM, matrix_t const & rightM) {
-    if(leftM.size() != rightM.at(0).size() ){
-        std::cout << " Matrix size mismatch for product " << std::endl;
+    if(leftM.at(0).size() != rightM.size() ){
+        std::cout << " Matrix, matrix size mismatch for product " << std::endl;
         return leftM;
     }
     
     matrix_t prod (leftM.size(), std::vector<double>(rightM[0].size())) ;
-    for (unsigned int i = 0; i < rightM[0].size(); ++i) {
+    for (unsigned int i = 0; i < leftM.size(); ++i) {
         for (unsigned int j = 0; j < rightM[0].size(); ++j ) {
             prod[i][j] = scalarProduct(leftM[i], getColumnOfMatrix(j,rightM));
         }
@@ -175,8 +191,8 @@ matrix_t GaussNewton1D::product(matrix_t const & leftM, matrix_t const & rightM)
 }
 
 std::vector<double> GaussNewton1D::productMatrVect(matrix_t const & leftM, std::vector<double> const & rightV) {
-    if(leftM.size() != rightV.size() ){
-        std::cout << " Matrix size mismatch for product " << std::endl;
+    if(leftM.at(0).size() != rightV.size() ){
+        std::cout << " Matrix, Vector size mismatch for product " << std::endl;
         return rightV;
     }
     std::vector<double> prod {};
@@ -232,10 +248,11 @@ std::vector<double> GaussNewton1D::getColumnOfMatrix(unsigned int const jColumn,
 
 
 void GaussNewton1D::calcErrorVector() {
-    if((_x.size() == 0) || (_y.size() == 0) ) {
+    if((_x.size() == 0) || (_y.size() == 0) || (_params.size() == 0)) {
         std::cout << "Empty vector problem" << std::endl;
         return;
     }
+    
     _r.clear();
     for(unsigned int i =0 ; i < _x.size(); ++i) {
         _r.push_back(_y.at(i) - _targetFncPtr(_x.at(i), _params));
@@ -248,4 +265,31 @@ void GaussNewton1D::setDinamicScale(double dinamicScale) {
 
 double GaussNewton1D::getDinamicScale() const {
     return _dinamicScale ;
+}
+
+void GaussNewton1D::setParams(std::vector<double> params){
+    _params = params;
+}
+std::vector<double> GaussNewton1D::getParams() const{
+    return _params;
+}
+void GaussNewton1D::setX(std::vector <double> x){
+    _x = x;
+}
+std::vector <double> GaussNewton1D::getX() const{
+    return _x;
+}
+void GaussNewton1D::setY(std::vector<double> raw){
+    _y = raw;
+}
+std::vector<double> GaussNewton1D::getY() const{
+    return _y;
+}
+
+std::vector<double> GaussNewton1D::getErrors() const{
+    return _r;
+}
+
+matrix_t GaussNewton1D::getJacbian() const {
+    return _jacobian;
 }
