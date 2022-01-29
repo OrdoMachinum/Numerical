@@ -14,7 +14,7 @@ bool csvtools::vecToCsv(std::string outFnm, const std::vector<double> & vecOfDou
     return true;
 }
 
-bool csvtools::vecToCsv(std::string outFnm, const std::vector<std::vector<double> > & vecOfDoub, char delim) {
+bool csvtools::vecToCsv(std::string outFnm, const std::vector<std::vector<double> > & vecOfDoub, char delim =';') {
     std::ofstream outf(outFnm);
     if (!outf) {
         return false;
@@ -46,7 +46,7 @@ bool csvtools::vecToCsv(std::string outFnm, const std::vector<std::vector<double
 
 }
 
-bool csvtools::csvToVects(std::string inFnm, char delim, std::vector<std::vector<double> > & vecVecDouble){
+bool csvtools::csvToVects(std::string inFnm, std::vector<std::vector<double> > & vecVecDouble, char delim =';'){
     std::ifstream in (inFnm);
     if(!in) {
         std::cout << "File reading error of " << inFnm << std::endl;
@@ -60,14 +60,14 @@ bool csvtools::csvToVects(std::string inFnm, char delim, std::vector<std::vector
         if (lineInput.size() == 0) {
             continue;
         }
-        splitString(lineInput, delim, row);
+        splitString(lineInput, row, delim);
         vecVecDouble.push_back(row);
     }
     in.close();
     return true;
 }
 
-int csvtools::splitString(const std::string& inStr, char delim, std::vector<double> & outDoubleVect) {
+int csvtools::splitString(const std::string& inStr, std::vector<double> & outDoubleVect, char delim = ';') {
      std::string word = "";
      outDoubleVect.clear();
      uint64_t startIndex = 0;

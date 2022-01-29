@@ -22,7 +22,7 @@ int main (int argc, char** argv) {
     std::cout << "argc: " << argc << std::endl;
 
 
-    if (!csvtools::csvToVects(fileName, ';', my)) {
+    if (!csvtools::csvToVects(fileName, my, ';')) {
         std::cout << "ERROR" << std::endl;
         return 1;
     }
