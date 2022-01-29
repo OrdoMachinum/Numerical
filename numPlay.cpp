@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include "csvtools.hpp"
-#include "GaussNewton.hpp"
+#include "include/csvtools.hpp"
+#include "include/GaussNewton.hpp"
 
 double funcToFit (double x, std::vector<double> params) {
     return params[0] * (x-params[1])*(x-params[1]) + params[2];

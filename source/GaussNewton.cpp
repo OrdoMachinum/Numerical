@@ -1,4 +1,4 @@
-#include "GaussNewton.hpp"
+#include "../include/GaussNewton.hpp"
 
 
 GaussNewton1D::GaussNewton1D(double (*targetFncPtr) (double xi, std::vector<double> params)){

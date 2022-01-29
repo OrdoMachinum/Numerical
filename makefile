@@ -5,4 +5,4 @@ else
 endif
 
 $(OUT) :
-	g++ -o $(OUT) numPlay.cpp GaussNewton.cpp csvtools.cpp
+	g++ -o $(OUT) numPlay.cpp source/GaussNewton.cpp source/csvtools.cpp

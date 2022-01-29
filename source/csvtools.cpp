@@ -1,4 +1,4 @@
-#include "csvtools.hpp"
+#include "../include/csvtools.hpp"
 
 
 bool csvtools::vecToCsv(std::string outFnm, const std::vector<double> & vecOfDoub) {
