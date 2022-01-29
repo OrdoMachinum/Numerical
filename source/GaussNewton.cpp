@@ -2,37 +2,37 @@
 
 
 GaussNewton1D::GaussNewton1D(double (*targetFncPtr) (double xi, std::vector<double> params)){
-    _targetFncPtr = targetFncPtr;
+    m_targetFncPtr = targetFncPtr;
 }
 
 double GaussNewton1D::partDerivative(double xi, unsigned int paramIdx) { // numerical approx of partial derivative
-    if (_targetFncPtr == nullptr) {
+    if (m_targetFncPtr == nullptr) {
         std::cout << " No Valid Function is loaded " << std::endl;
         return 0;
     }
-    _paramsVolatile = _params;
-    const double delta = _params.at(paramIdx) * _dinamicScale;
+    m_paramsVolatile = m_params;
+    const double delta = m_params.at(paramIdx) * m_dinamicScale;
 
-    _paramsVolatile.at(paramIdx) = _params.at(paramIdx) + delta;
-    const double upper = _targetFncPtr(xi, _paramsVolatile);
+    m_paramsVolatile.at(paramIdx) = m_params.at(paramIdx) + delta;
+    const double upper = m_targetFncPtr(xi, m_paramsVolatile);
 
-    _paramsVolatile.at(paramIdx) = _params.at(paramIdx) - delta;
-    const double lower = _targetFncPtr(xi, _paramsVolatile);
+    m_paramsVolatile.at(paramIdx) = m_params.at(paramIdx) - delta;
+    const double lower = m_targetFncPtr(xi, m_paramsVolatile);
 
     return (upper-lower) / (2.0*delta);
     
 }
 
 void GaussNewton1D::calcJacobianOfErrorFunction() {
-    if ((_x.size() == 0) || (_params.size() == 0) ) {
+    if ((m_x.size() == 0) || (m_params.size() == 0) ) {
         std::cout << "Empty vectors" << std::endl;
         return;
     }
-    _jacobian.clear();
-    _jacobian.resize(_x.size());
-    for(unsigned int i = 0; i < _x.size(); ++i) {
-        for (unsigned int j = 0; j < _params.size(); ++j) {
-            _jacobian.at(i).push_back( -1.0 * partDerivative(_x.at(i), j)); // Calculation of Jacobian on an error function that is why -1 Partial derivtive
+    m_jacobian.clear();
+    m_jacobian.resize(m_x.size());
+    for(unsigned int i = 0; i < m_x.size(); ++i) {
+        for (unsigned int j = 0; j < m_params.size(); ++j) {
+            m_jacobian.at(i).push_back( -1.0 * partDerivative(m_x.at(i), j)); // Calculation of Jacobian on an error function that is why -1 Partial derivtive
         }
     }
 }
@@ -49,17 +49,17 @@ void GaussNewton1D::calcNextBeta() {
     calcJacobianOfErrorFunction();
     calcErrorVector();
 
-    if ( (_jacobian.size() == 0) || (_r.size() == 0) || (_params.size() == 0) ) {
+    if ( (m_jacobian.size() == 0) || (m_r.size() == 0) || (m_params.size() == 0) ) {
         std::cout << "Not initalized members" << std::endl;
         return;
     }
-    const auto prevParams = _params;
-    const auto transJac = getTransponated(_jacobian);
-    const auto inverted = getInverse(product(transJac, _jacobian));
+    const auto prevParams = m_params;
+    const auto transJac = getTransponated(m_jacobian);
+    const auto inverted = getInverse(product(transJac, m_jacobian));
 
     const auto jacProdPred = product(inverted , transJac);
 
-    _params = sumVects(prevParams, scaleVects( productMatrVect(jacProdPred, _r) , -1.0) );
+    m_params = sumVects(prevParams, scaleVects( productMatrVect(jacProdPred, m_r) , -1.0) );
 }
 
 double GaussNewton1D::calcDeterminant(const matrix_t & matr) {
@@ -248,48 +248,48 @@ std::vector<double> GaussNewton1D::getColumnOfMatrix(unsigned int const jColumn,
 
 
 void GaussNewton1D::calcErrorVector() {
-    if((_x.size() == 0) || (_y.size() == 0) || (_params.size() == 0)) {
+    if((m_x.size() == 0) || (m_y.size() == 0) || (m_params.size() == 0)) {
         std::cout << "Empty vector problem" << std::endl;
         return;
     }
     
-    _r.clear();
-    for(unsigned int i =0 ; i < _x.size(); ++i) {
-        _r.push_back(_y.at(i) - _targetFncPtr(_x.at(i), _params));
+    m_r.clear();
+    for(unsigned int i =0 ; i < m_x.size(); ++i) {
+        m_r.push_back(m_y.at(i) - m_targetFncPtr(m_x.at(i), m_params));
     }
 }
 
 void GaussNewton1D::setDinamicScale(double dinamicScale) {
-     _dinamicScale = dinamicScale;
+     m_dinamicScale = dinamicScale;
 }
 
 double GaussNewton1D::getDinamicScale() const {
-    return _dinamicScale ;
+    return m_dinamicScale ;
 }
 
 void GaussNewton1D::setParams(std::vector<double> params){
-    _params = params;
+    m_params = params;
 }
 std::vector<double> GaussNewton1D::getParams() const{
-    return _params;
+    return m_params;
 }
 void GaussNewton1D::setX(std::vector <double> x){
-    _x = x;
+    m_x = x;
 }
 std::vector <double> GaussNewton1D::getX() const{
-    return _x;
+    return m_x;
 }
 void GaussNewton1D::setY(std::vector<double> raw){
-    _y = raw;
+    m_y = raw;
 }
 std::vector<double> GaussNewton1D::getY() const{
-    return _y;
+    return m_y;
 }
 
 std::vector<double> GaussNewton1D::getErrors() const{
-    return _r;
+    return m_r;
 }
 
 matrix_t GaussNewton1D::getJacbian() const {
-    return _jacobian;
+    return m_jacobian;
 }
